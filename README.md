@@ -55,7 +55,7 @@ Start the development server:
 python app.py
 ```
 
-Example curl POST request:
+Example curl POST request for sales data:
 
 ```bash
 curl --header "Content-Type: application/json" \
@@ -64,7 +64,7 @@ curl --header "Content-Type: application/json" \
   http://localhost:5000/api/sales
 ```
 
-Example response:
+Example response for sales data:
 
 ```json
 {
@@ -72,7 +72,24 @@ Example response:
 }
 ```
 
-## Visuals
+Example curl POST request for quiz data:
+
+```bash
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"file_loc":"data/cold_war_classroom_quiz_sample.csv","user_request":"What questions were answered 100% correct by all the students?"}' \
+  http://localhost:5000/api/quiz-results
+```
+
+Example response for quiz data:
+
+```json
+{
+  "response": "The questions that were answered 100% correct by all the students are:\n\n1. What was the significance of the Cuban Missile Crisis during the Cold War?\n2. What was the purpose of the Berlin Wall?"
+}
+```
+
+## Visuals - Sales Data Responses
 
 ![distinct product lines response](https://mckenzieservices.com/wp/wp-content/uploads/2023/09/distinct-product-lines-response.png?raw=true)
 ![distinct product lines csv](https://mckenzieservices.com/wp/wp-content/uploads/2023/09/distinct-product-lines-csv.png?raw=true)
@@ -104,7 +121,7 @@ math is 953.14 / 12 = 79.43.
 
 ## Analyze The Data For Patterns or Trends
 
-For customer ID 778, I asked the API to "Analyze the data and look for patterns or trends".  Here is what it came back with:
+For customer ID 778, I asked the API to `Analyze the data and look for patterns or trends`.  Here is what it came back with:
 
 ```
 As an AI model, I can provide a general analysis based on the given CSV data. Here are some observations:
@@ -128,11 +145,81 @@ As an AI model, I can provide a general analysis based on the given CSV data. He
 Please note that a more detailed analysis could be performed with specialized data analysis tools or software.
 ```
 
-## Roadmap
+## Classroom Quiz Data on the Cold War
 
-I would like to expand this repo to include other CSV data use cases.  One, for example, applies to education technology.  In a classroom setting, 
-given a CSV file of student test results (quiz or test questions, and whether or not the students got them right or wrong), produce a custom lesson
-plan based upon what questions were answered incorrectly by most of the students.
+To expand this repo to include another CSV data use case, I've added a fictional 5th grade classroom quiz on the topic of the Cold War.  
+
+See `data/cold_war_classroom_quiz_sample.csv` which has student ID's, quiz question ID's, quiz questions, and whether the student got the answer correct or incorrect. The data is denormalized. 
+The idea here is that we are seeing if ChatGPT-4 can determine any meaning from this data and/or actionable next steps. 
+
+My first idea was to produce a custom lesson plan based upon what questions were answered incorrectly by most of the students.  Questions about the Cuban Missile Crisis and the Berlin Wall were hard coded to CORRECT for all 15 students in the dataset.  The other 8 questions were given a radomized CORRECT or INCORRECT response for each student. The idea behind this is: would ChatGPT-4 correctly recognize that the Berlin Wall and the Cuban Missile Crisis likely didn't need to be in the lesson plan or needed to be emphasized less?
+
+When the question `Write a lesson plan for what to teach based on the quiz results` was asked, I found that it still recommended a group activity discussing the Cuban Missile Crisis and the Berlin Wall, even though the test results showed 100% CORRECT responses on those two questions. So, this was a little disappointing at first.
+
+However, when I asked it to `Analyze the data and look for recommendations on what I need to teach regarding the cold war` I found the response to be better.  It correctly excluded the Cold War and Berlin Wall from the response.  And, it even called out particularly problematic areas, saying things like `The Iron Curtain: The fifth question about the \"Iron Curtain\" had more incorrect answers than correct ones.`.
+
+Then I asked a more metric based question about pass versus fail: `If passing the quiz means at least 60% answers correct, how many students passed the quiz versus failed the quiz?`. The system incorrectly answered that 10 students failed the quiz, which was disappointing. A pivot in Excel shows that only 6 students failed the quiz with the dataset.  However, the `What questions were answered 100% correct by all the students?` was answered correctly. The `Which question did the highest number of students answer wrong?` was also answered correcly.
+
+Then I asked the system to `Using the question that the highest number of students answered wrong, write a lesson plan that specifically covers that question.`. Here is what it came up with:
+
+```
+Looking at the data, the question that the highest number of students answered wrong is: \"Which two major superpowers were the primary participants in the Cold War?\". 
+
+Lesson Plan:
+
+Title: The Cold War: The Clash of Superpowers
+
+Objective: 
+By the end of the lesson, students will be able to identify the two major superpowers that were the primary participants in the Cold War and understand their roles and ideologies.
+
+Materials:
+1. Textbook or online resources on the Cold War
+2. Map of the world during the Cold War
+3. Video clips or documentaries about the Cold War
+4. Whiteboard and markers
+
+Procedure:
+
+1. Introduction (10 minutes)
+   - Begin the lesson by asking students what they already know about the Cold War. Write their responses on the board.
+   - Introduce the two superpowers involved in the Cold War: The United States and the Soviet Union.
+
+2. Direct Instruction (20 minutes)
+   - Provide a brief overview of the Cold War, emphasizing the roles of the United States and the Soviet Union.
+   - Discuss the ideologies of each superpower (democracy and capitalism for the United States, communism for the Soviet Union).
+   - Show the map of the world during the Cold War, pointing out the spheres of influence of each superpower.
+
+3. Guided Practice (15 minutes)
+   - Show a video clip or documentary about the Cold War, focusing on the roles of the United States and the Soviet Union.
+   - Pause the video at key points to discuss and clarify.
+
+4. Independent Practice (10 minutes)
+   - Have students work individually or in pairs to answer a worksheet with questions about the two superpowers in the Cold War.
+
+5. Closing (5 minutes)
+   - Review the main points of the lesson.
+   - Revisit the initial question: \"Which two major superpowers were the primary participants in the Cold War?\" and have students answer.
+
+Homework:
+Assign students to read a specific chapter or sections in their textbook or online resources that further discuss the roles of the United States and the Soviet Union in the Cold War.
+
+Assessment:
+Students' understanding will be assessed through their participation in class discussions, their answers to the worksheet, and their responses to the homework reading.
+```
+
+I found it intriguing that the system could indeed identify a specific subject area that most students had trouble with, and build a custom lesson plan specifically taylored to meet that area.
+
+## Visual - Classroom Quiz Data Responses
+
+![quiz responses](https://mckenzieservices.com/wp/wp-content/uploads/2023/09/quiz-responses.png?raw=true)
+![quiz lesson plan response](https://mckenzieservices.com/wp/wp-content/uploads/2023/09/quiz-lesson-plan-response.png?raw=true)
+
+## Takeaways
+
+One of the interesting findings is that how the data was sorted did significantly impact the quality of the response from Chat GPT-4.  For example, when 
+I sorted the sales order data by order ID, I received back a more accurate response.  
+
+This kind of technology will only get better and better.  I feel this is the tip of the iceberg of what can be done by analyzing data using natural language statements or questions.
 
 ## Contributing
 
@@ -143,3 +230,5 @@ to discuss what you would like to change.
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+
