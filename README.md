@@ -1,9 +1,10 @@
-# Seed Chat GPT with Contextual Sales Data
+# Train Chat GPT With Your CSV Sales Data
 
-This repo explores the idea that we can seed Chat GPT with contextual CSV sales order data. So that 
+This repo explores the idea that we can train Chat GPT with contextual CSV sales order data. So that 
 a user can ask natural language questions and get back details about certain order data (related to a single customer).  
 
-These could be things like order status, when an order was shipped, expected delivery date, what items are on the order, the total quantity on the order, and more.
+These could be things like order status, when an order was shipped, expected delivery date, what items are on the order, the total quantity on the order, or 
+even analyzing the data and looking for patterns or trends.
 The sales order data could be provided from any data source, so any ecommerce company could 
 leverage this kind of technology. It could be used by internal stakeholders or by external customers engaging in an AI chat bot.
 
@@ -18,12 +19,12 @@ The Chat GPT 4 API is then called, providing the CSV data as "system content".  
 data in a natural language format.  Some examples that I successfully tested for customer 778:
 
 * What is the status of the order that I placed on 5/7/04?
-* What is the status of order 10248?
 * List all the product codes on order 10329
 * What is the total quantity ordered for order number 10107?
 * List the distinct product lines on order 10292
 * How many different orders do I have?
 * What are the dates that I placed my orders?
+* Analyze the data and look for patterns or trends
 
 ## Installation
 
@@ -101,6 +102,31 @@ The interesting thing to note here is that it did identify all the prices correc
 but rather 953.14. The number of line items of 12 is correct.  And if the sum was actually 1053.11 then the answer of 87.76 would also be correct.  However, the correct 
 math is 953.14 / 12 = 79.43.
 
+## Analyze The Data For Patterns or Trends
+
+For customer ID 778, I asked the API to "Analyze the data and look for patterns or trends".  Here is what it came back with:
+
+```
+As an AI model, I can provide a general analysis based on the given CSV data. Here are some observations:
+
+1. Customer: All the orders are made by the same customer, \"Land of Toys Inc.\" located in NYC, NY, USA.
+
+2. Order Status: There are two types of order statuses - 'Shipped' and 'Cancelled'. It might be interesting to investigate the reasons for cancellations.
+
+3. Product Line: The orders are spread across different product lines including 'Motorcycles', 'Ships', 'Vintage Cars', 'Trains', 'Classic Cars', and 'Trucks and Buses'. 
+
+4. Quantity Ordered: The quantity ordered varies significantly from order to order, ranging from 20 to 50 units.
+
+5. Price: The price of each unit also varies, with some as low as 30.06 and others as high as 100. 
+
+6. Order Dates: The orders are spread across different years (2003, 2004) and months, which could be used to analyze seasonal trends.
+
+7. Deal Size: The deal sizes are categorized as 'Small', 'Medium', and 'Large'. It could be interesting to see the correlation between deal size, quantity ordered, and total sales.
+
+8. Sales: The sales amount varies from order to order, which could be due to the differences in quantity ordered and unit price.
+
+Please note that a more detailed analysis could be performed with specialized data analysis tools or software.
+```
 
 ## Contributing
 
