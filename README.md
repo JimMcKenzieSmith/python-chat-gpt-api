@@ -1,18 +1,19 @@
-# Train Chat GPT-4 With Your CSV Sales Data
+# Train Chat GPT-4 With Your CSV Data
 
-This repo explores the idea that we can train Chat GPT-4 with contextual CSV sales order data. So that 
-a user can ask natural language questions and get back details about certain order data (related to a single customer).  
+This repo explores the idea that we can train Chat GPT-4 with contextual CSV data. So that 
+a user can ask natural language questions and get back insights, details, or action items to take around the data. 
 
-These could be things like order status, when an order was shipped, expected delivery date, what items are on the order, the total quantity on the order, or 
-even analyzing the data and looking for patterns or trends.
+For sales order data, this could be things like order status, when an order was shipped, expected delivery date, what items are on the order, the total quantity on the order, or even analyzing the data and looking for patterns or trends.
 The sales order data could be provided from any data source, so any ecommerce company could 
 leverage this kind of technology. It could be used by internal stakeholders or by external customers engaging in an AI chat bot.
 
+For classroom quiz or test data, the value-add could be creating a custom lesson plan based on which questions the most students had trouble answering correctly.
+
 ## How It Works
 
-A sample CSV sales data is provided in the data folder, and loaded into a Pandas dataframe by the app.
+Sample CSV data files are provided in the data folder, and these get loaded into a Pandas dataframe by the app.
 
-A POST request to the endpoint passes a customer ID and a question/request about the data.  The customer ID is used to parse the dataframe 
+For the sales data endpoint, a POST request to the endpoint passes a customer ID and a question/request about the data.  The customer ID is used to parse the dataframe 
 to get only order data that pertains the customer by their ID.  
 
 The Chat GPT 4 API is then called, providing the CSV data as "system content".  Then a "user content" question is asked about the
@@ -25,6 +26,8 @@ data in a natural language format.  Some examples that I successfully tested for
 * How many different orders do I have?
 * What are the dates that I placed my orders?
 * Analyze the data and look for patterns or trends
+
+For the quiz data endpoint, more information is provided below.
 
 ## Installation
 
@@ -41,7 +44,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install require
 pip install -r requirements.txt
 ```
 
-Set your api key in your .zshrc file.
+Set your api key in your .zshrc file if using a Mac.
 
 ```bash
 export CHATGPT_API_KEY=your-api-key-from-your-openai-account
