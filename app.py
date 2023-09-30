@@ -6,8 +6,8 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/api/chat', methods=['POST'])
-def get_chat():
+@app.route('/api/sales', methods=['POST'])
+def get_sales():
     try:
         openai.api_key = os.getenv('CHATGPT_API_KEY')
 

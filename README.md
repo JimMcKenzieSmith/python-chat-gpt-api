@@ -1,6 +1,6 @@
-# Train Chat GPT With Your CSV Sales Data
+# Train Chat GPT-4 With Your CSV Sales Data
 
-This repo explores the idea that we can train Chat GPT with contextual CSV sales order data. So that 
+This repo explores the idea that we can train Chat GPT-4 with contextual CSV sales order data. So that 
 a user can ask natural language questions and get back details about certain order data (related to a single customer).  
 
 These could be things like order status, when an order was shipped, expected delivery date, what items are on the order, the total quantity on the order, or 
@@ -61,7 +61,7 @@ Example curl POST request:
 curl --header "Content-Type: application/json" \
   --request POST \
   --data '{"customer_id":"778","user_request":"List the distinct product lines on order 10292"}' \
-  http://localhost:5000/api/chat
+  http://localhost:5000/api/sales
 ```
 
 Example response:
@@ -127,6 +127,12 @@ As an AI model, I can provide a general analysis based on the given CSV data. He
 
 Please note that a more detailed analysis could be performed with specialized data analysis tools or software.
 ```
+
+## Roadmap
+
+I would like to expand this repo to include other CSV data use cases.  One, for example, applies to education technology.  In a classroom setting, 
+given a CSV file of student test results (quiz or test questions, and whether or not the students got them right or wrong), produce a custom lesson
+plan based upon what questions were answered incorrectly by most of the students.
 
 ## Contributing
 
