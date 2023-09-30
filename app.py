@@ -49,9 +49,8 @@ def get_sales():
         response = {'response': openai_response.choices[0].message.content}
 
         return response, 200
-    except RuntimeError:
-        # TODO: add better error handling
-        return jsonify({'error': 'Runtime error occured.'}), 400
+    except KeyError:
+        return jsonify({'error': 'customer_id and user_request are required inputs in the POST request JSON data'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
