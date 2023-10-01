@@ -65,7 +65,7 @@ def get_quiz_results():
         system_prompt = 'Use this CSV quiz result data, from a 5th grade classroom, when answering questions'
 
         # Get a response from Chat GPT-4
-        response = get_response_from_chat_gpt(df.to_csv(index=False), system_prompt, user_request, 0)
+        response = get_response_from_chat_gpt(df.to_csv(index=False), system_prompt, user_request, 0.2)
 
         return response, 200
 
@@ -80,7 +80,7 @@ def get_response_from_chat_gpt(csv_data, system_prompt, user_request, chat_temer
                 {"role": "user", "content": user_request}
             ],
             # The sampling temperature can be a range between 0 and 2. Higher values like 0.8 will make the output more random, 
-            # while lower values like 0.2 will make it more focused and deterministic. Our use case is very deterministic, so we use a 0.
+            # while lower values like 0.2 will make it more focused and deterministic. Our use case is very deterministic, so we use a low number.
             temperature = chat_temerature
         )
 
