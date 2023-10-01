@@ -29,6 +29,12 @@ def test_get_sales(client, mocker):
     assert response.status_code == 200
     assert b"Cancelled" in response.data
 
+def test_get_sales_missing_data(client, mocker):
+    response = client.post("/api/sales", 
+        data=json.dumps(dict(user_request='What is the status of order 10248?')),
+        content_type='application/json')
+    assert response.status_code == 400
+
 def test_get_quiz_results(client, mocker):
     mocker.patch(
         'main.get_response_from_chat_gpt',
@@ -46,3 +52,9 @@ def test_get_quiz_results(client, mocker):
         content_type='application/json')
     assert response.status_code == 200
     assert b"superpowers" in response.data
+
+def test_get_quiz_results_missing_data(client, mocker):
+    response = client.post("/api/quiz-results", 
+        data=json.dumps(dict(user_request='Which question did the highest number of students answer wrong?')),
+        content_type='application/json')
+    assert response.status_code == 400
