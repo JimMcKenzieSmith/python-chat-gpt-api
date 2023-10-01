@@ -55,7 +55,7 @@ export CHATGPT_API_KEY=your-api-key-from-your-openai-account
 Start the development server:
 
 ```bash
-python app.py
+python main.py
 ```
 
 Example curl POST request for sales data:

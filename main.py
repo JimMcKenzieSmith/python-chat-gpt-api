@@ -3,8 +3,10 @@ import openai
 import os
 from flask import Flask, request, jsonify
 
+openai_model = 'gpt-4'
 
 app = Flask(__name__)
+
 
 @app.route('/api/sales', methods=['POST'])
 def get_sales():
@@ -26,27 +28,18 @@ def get_sales():
 
         # search for rows with a customer ID (value that is passed in via an API)
         # get one customer's data into a dataframe to give chatgpt context to the chat conversation
-        customer_data = df[df['CUSTOMER_ID'] == customer_id]
+        df = df[df['CUSTOMER_ID'] == customer_id]
 
         # chat gpt gives more accurate repsonses if the csv data is sorted by the order number, so that line items are grouped together
-        customer_data.sort_values(by=['ORDER_NUMBER'], inplace=True)
+        df = df.sort_values('ORDER_NUMBER')
 
         # TODO: work the customer's fist name into the chat response
         # customer_first_name = customer_data['CONTACT_FIRST_NAME'].iloc[0]
 
-        openai_response = openai.ChatCompletion.create(
-            model = "gpt-4",
-            messages = [
-                {"role": "system", "content": "Use this CSV order data when answering questions: \n" + customer_data.to_csv(index=False)},
-                {"role": "user", "content": user_request}
-            ],
-            # The sampling temperature can be a range between 0 and 2. Higher values like 0.8 will make the output more random, 
-            # while lower values like 0.2 will make it more focused and deterministic. Our use case is very deterministic, so we use a 0.
-            temperature = 0 
-        )
+        system_prompt = 'Use this CSV order data when answering questions'
 
-        # Create a JSON response
-        response = {'response': openai_response.choices[0].message.content}
+        # Get a response from Chat GPT-4
+        response = get_response_from_chat_gpt(df.to_csv(index=False), system_prompt, user_request, 0)
 
         return response, 200
     except KeyError:
@@ -67,24 +60,31 @@ def get_quiz_results():
         df = pd.read_csv(file_loc)
 
         # sort the data by question ID to see if we get a better response from chat gpt
-        df.sort_values(by=['QUIZ_QUESTION_ID'], inplace=True)
+        df = df.sort_values('QUIZ_QUESTION_ID')
 
-        openai_response = openai.ChatCompletion.create(
-            model = "gpt-4",
-            messages = [
-                {"role": "system", "content": "Use this CSV quiz result data, from a 5th grade classroom, when answering questions: \n" + df.to_csv(index=False)},
-                {"role": "user", "content": user_request}
-            ],
-            temperature = 0.2
-        )
+        system_prompt = 'Use this CSV quiz result data, from a 5th grade classroom, when answering questions'
 
-        response = {'response': openai_response.choices[0].message.content}
+        # Get a response from Chat GPT-4
+        response = get_response_from_chat_gpt(df.to_csv(index=False), system_prompt, user_request, 0)
 
         return response, 200
 
     except KeyError:
         return jsonify({'error': 'file_loc and user_request are required inputs in the POST request JSON data'}), 400
 
+def get_response_from_chat_gpt(csv_data, system_prompt, user_request, chat_temerature):
+        openai_response = openai.ChatCompletion.create(
+            model = openai_model,
+            messages = [
+                {"role": "system", "content": system_prompt + ": \n" + csv_data},
+                {"role": "user", "content": user_request}
+            ],
+            # The sampling temperature can be a range between 0 and 2. Higher values like 0.8 will make the output more random, 
+            # while lower values like 0.2 will make it more focused and deterministic. Our use case is very deterministic, so we use a 0.
+            temperature = chat_temerature
+        )
+
+        return {'response': openai_response.choices[0].message.content}
 
 if __name__ == '__main__':
     app.run(debug=True)
